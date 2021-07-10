@@ -30,20 +30,32 @@ export const html = (arr, ...values) => {
           console.log('Attribute =>', name, node.getAttribute(name));
         }
       }
-    } else if (node.nodeType === 3 && node.data.startsWith('$lit-maker-')) {
-      console.log('TextNode =>', node.data);
+    } else if (
+      (node.nodeType === 3 || node.nodeType === 8) &&
+      node.data.trimStart().startsWith('$lit-maker-')
+    ) {
+      console.log(
+        `${node.nodeType === 3 ? 'TextNode' : 'CommentNode'} =>`,
+        node.data
+      );
     }
   }
 };
 
 const a = 1;
-const b = 2;
-const c = () => {};
+const b = () => {};
+const d = [1, 2, 3];
+const e = true;
 
 html`
-  <div id="${b}" @click="${c}">
+  <div id="${a}" @click="${b}">
     <span>${a}</span>
     <span>1</span>
-    <span test="${b}">2</span>
+    <span test="${a}">2</span>
+    <ul>
+      ${d.map(data => html`<li>${data}</li>`)}
+    </ul>
+    ${e ? html`<div aaa="${a}">true</div>` : html`<div>false</div>`}
+    <!-- ${a} -->
   </div>
 `;
