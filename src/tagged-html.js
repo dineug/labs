@@ -1,4 +1,4 @@
-export const html = (arr, ...values) => {
+const html = (arr, ...values) => {
   const tpl = arr
     .reduce(
       (acc, cur, i) =>
