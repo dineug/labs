@@ -38,6 +38,8 @@ export function defineElement(name, setup) {
   customElements.define(name, C);
 }
 
+// ================
+
 function useMyHook() {
   onBeforeMount(() => {
     console.log('useMyHook onBeforeMount');

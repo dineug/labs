@@ -1,4 +1,9 @@
+const cache = new WeakSet();
+
 const html = (arr, ...values) => {
+  console.log(cache.has(arr));
+  cache.add(arr);
+
   const tpl = arr
     .reduce(
       (acc, cur, i) =>
@@ -49,7 +54,7 @@ const b = () => {};
 const d = [1, 2, 3];
 const e = true;
 
-html`
+const tag = () => html`
   <div id="${a}" @click="${b}">
     <span>${a}</span>
     <span>1</span>
@@ -61,3 +66,6 @@ html`
     <!-- ${a} -->
   </div>
 `;
+
+tag();
+tag();
