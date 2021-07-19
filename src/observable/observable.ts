@@ -100,7 +100,7 @@ const effect = (raw: any, p: PropName) =>
     queue.includes(observer) || queue.push(observer);
 
     if (!batch) {
-      queueMicrotask(execute);
+      setTimeout(execute, 0);
       batch = true;
     }
   });
@@ -169,7 +169,7 @@ function nextEffect(raw: any, p: PropName) {
   }
 
   if (!nextBatch) {
-    queueMicrotask(nextExecute);
+    setTimeout(nextExecute);
     nextBatch = true;
   }
 }
