@@ -77,7 +77,7 @@ const effect = (raw, p) =>
     queue.includes(observer) || queue.push(observer);
 
     if (!batch) {
-      setTimeout(execute, 0);
+      requestAnimationFrame(execute);
       batch = true;
     }
   });

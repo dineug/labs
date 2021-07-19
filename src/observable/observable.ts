@@ -100,7 +100,7 @@ const effect = (raw: any, p: PropName) =>
     queue.includes(observer) || queue.push(observer);
 
     if (!batch) {
-      setTimeout(execute, 0);
+      requestAnimationFrame(execute);
       batch = true;
     }
   });
@@ -169,7 +169,7 @@ function nextEffect(raw: any, p: PropName) {
   }
 
   if (!nextBatch) {
-    setTimeout(nextExecute);
+    requestAnimationFrame(nextExecute);
     nextBatch = true;
   }
 }
