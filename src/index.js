@@ -5,4 +5,4 @@
 // import './observable/Observer';
 // import './observable/tiny-observable';
 // import './observable/observable-and-composition-api';
-import './rx-html';
+import './r-html';

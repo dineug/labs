@@ -6,10 +6,12 @@ import {
   isTextNode,
   isCommentNode,
   isMarker,
-  isSpreadMarker,
+  isMarkerOnly,
+  isPrefixSpreadMarker,
   getAttributeType,
   getAttributeName,
   getMarkerIndex,
+  splitTextNode,
 } from './helper';
 
 export type DynamicNodeType =
@@ -17,6 +19,7 @@ export type DynamicNodeType =
   | 'SpreadAttribute'
   | 'EventAttribute'
   | 'PropertyAttribute'
+  | 'BooleanAttribute'
   | 'TextNode'
   | 'CommentNode';
 
@@ -34,7 +37,7 @@ export interface Template {
 
 export interface TemplateLiterals {
   strings: TemplateStringsArray;
-  values: unknown[];
+  values: any[];
 }
 
 export const cache = new WeakMap<TemplateStringsArray, Template>();
@@ -73,7 +76,7 @@ export const html = (
               attrName: getAttributeName(attrName),
             });
             node.removeAttribute(attrName);
-          } else if (isSpreadMarker(attrName)) {
+          } else if (isPrefixSpreadMarker(attrName)) {
             template.nodes.push({
               type: 'SpreadAttribute',
               nodeIndex,
@@ -84,12 +87,18 @@ export const html = (
         }
       }
     } else if (isTextNode(node) && isMarker(node.data)) {
-      template.nodes.push({
-        type: 'TextNode',
-        nodeIndex,
-        valueIndex: getMarkerIndex(node.data),
-      });
-      node.data = '';
+      if (isMarkerOnly(node.data)) {
+        template.nodes.push({
+          type: 'TextNode',
+          nodeIndex,
+          valueIndex: getMarkerIndex(node.data),
+        });
+        node.data = '';
+      } else {
+        splitTextNode(node);
+        walker.previousNode();
+        continue;
+      }
     } else if (isCommentNode(node) && isMarker(node.data)) {
       template.nodes.push({
         type: 'CommentNode',
