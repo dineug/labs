@@ -10,7 +10,8 @@ import {
   multiMarkerIndexRegexp,
   markerOnlyRegexp,
 } from './constants';
-import { Template, TemplateLiterals, DynamicNodeType } from './tagged-html';
+import { Template, TemplateLiterals, DynamicNodeType } from './r-html';
+import { ChildPart } from './r-render';
 
 type typeofKey =
   | 'bigint'
@@ -33,6 +34,13 @@ export function createWalker(node: Node) {
 }
 
 export const createMarker = (index: number) => `${MARKER}-${index}`;
+
+export const createChildPart = (
+  templateLiterals: TemplateLiterals
+): ChildPart => ({
+  templateLiterals,
+  parts: [],
+});
 
 export function createTemplate(tpl: string): Template {
   const element = document.createElement('template');
@@ -138,7 +146,7 @@ export const getAttributeName = (value: string) =>
     ? (value as string).substring(2)
     : value;
 
-export const cloneNode = (node: Node) => document.importNode(node, true);
+export const cloneNode = (node: Node) => node.cloneNode(true);
 
 export function* flat<T = any>(iterator: any[]): Generator<T> {
   for (const value of iterator) {
@@ -147,23 +155,24 @@ export function* flat<T = any>(iterator: any[]): Generator<T> {
   }
 }
 
-export function insertBefore(newChild: Node, refChild: Node) {
+export function insertBeforeNode(newChild: Node, refChild: Node) {
   const parent = refChild.parentElement;
-  if (!parent) return false;
+  if (!parent) return;
 
   parent.insertBefore(newChild, refChild);
-  return true;
 }
 
-export function insertAfter(newChild: Node, refChild: Node) {
+export function insertAfterNode(newChild: Node, refChild: Node) {
   const parent = refChild.parentElement;
-  if (!parent) return false;
+  if (!parent) return;
 
   refChild.nextSibling
     ? parent.insertBefore(newChild, refChild.nextSibling)
     : parent.appendChild(newChild);
-  return true;
 }
+
+export const removeNode = (node: Node) =>
+  node.parentElement && node.parentElement.removeChild(node);
 
 export function splitTextNode(node: Text) {
   const markers = getMultiMarkerIndex(node.data).map(index =>
@@ -185,6 +194,8 @@ export function splitTextNode(node: Text) {
     )
     .filter(node => node.data !== '')
     .forEach((textNode, index) =>
-      index === 0 ? (node.data = textNode.data) : insertAfter(textNode, node)
+      index === 0
+        ? (node.data = textNode.data)
+        : insertAfterNode(textNode, node)
     );
 }

@@ -40,14 +40,14 @@ export interface TemplateLiterals {
   values: any[];
 }
 
-export const cache = new WeakMap<TemplateStringsArray, Template>();
+export const templateCache = new WeakMap<TemplateStringsArray, Template>();
 
 export const html = (
   strings: TemplateStringsArray,
   ...values: any[]
 ): TemplateLiterals => {
   const templateLiterals: TemplateLiterals = { strings, values };
-  if (cache.has(strings)) return templateLiterals;
+  if (templateCache.has(strings)) return templateLiterals;
 
   const tpl = strings
     .reduce<Array<string>>(
@@ -111,6 +111,6 @@ export const html = (
     nodeIndex++;
   }
 
-  cache.set(strings, template);
+  templateCache.set(strings, template);
   return templateLiterals;
 };
