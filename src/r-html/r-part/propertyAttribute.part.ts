@@ -1,4 +1,4 @@
-import { PartOptions, MixinPart } from '@/r-html/r-part/helper';
+import { CustomPartOptions, MixinPart } from '@/r-html/r-part/helper';
 
 export const PropertyAttributePart = MixinPart(
   class {
@@ -6,7 +6,7 @@ export const PropertyAttributePart = MixinPart(
     #value: any = null;
     #attrName: string;
 
-    constructor({ node, attrName = 'none' }: PartOptions) {
+    constructor({ node, attrName }: CustomPartOptions) {
       this.#node = node;
       this.#attrName = attrName;
     }

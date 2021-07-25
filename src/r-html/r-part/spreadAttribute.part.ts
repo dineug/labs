@@ -1,12 +1,12 @@
 import { isObject } from '@/r-html/helper';
-import { PartOptions, MixinPart } from '@/r-html/r-part/helper';
+import { CustomPartOptions, MixinPart } from '@/r-html/r-part/helper';
 
 export const SpreadAttributePart = MixinPart(
   class {
     #node: Node;
     #value: any = null;
 
-    constructor({ node }: PartOptions) {
+    constructor({ node }: CustomPartOptions) {
       this.#node = node;
     }
 

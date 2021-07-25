@@ -24,17 +24,25 @@ interface CustomPart {
   commit(value: any): void;
 }
 
+export interface CustomPartOptions {
+  node: Node;
+  attrName: string;
+}
+
 interface CustomPartClass {
-  new (options: PartOptions): CustomPart;
+  new (options: CustomPartOptions): CustomPart;
 }
 
 export const MixinPart = (Part: CustomPartClass): PartClass =>
   class extends Part implements Part {
     valueIndex: number;
 
-    constructor(options: PartOptions) {
-      super(options);
-      this.valueIndex = options.valueIndex;
+    constructor({ node, valueIndex, attrName }: PartOptions) {
+      super({
+        attrName: attrName ?? 'not-found-attribute-name',
+        node,
+      });
+      this.valueIndex = valueIndex;
     }
 
     commit(value: any) {

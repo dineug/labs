@@ -1,5 +1,5 @@
 import { isFunction } from '@/r-html/helper';
-import { PartOptions, MixinPart } from '@/r-html/r-part/helper';
+import { CustomPartOptions, MixinPart } from '@/r-html/r-part/helper';
 
 export const EventAttributePart = MixinPart(
   class {
@@ -7,7 +7,7 @@ export const EventAttributePart = MixinPart(
     #value: any = null;
     #attrName: string;
 
-    constructor({ node, attrName = 'none' }: PartOptions) {
+    constructor({ node, attrName }: CustomPartOptions) {
       this.#node = node as Element;
       this.#attrName = attrName;
     }

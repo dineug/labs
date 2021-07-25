@@ -12,7 +12,11 @@ import {
   removeNode,
 } from '@/r-html/helper';
 import { createTemplateInstance } from '@/r-html/r-render';
-import { PartOptions, ChildPart, MixinPart } from '@/r-html/r-part/helper';
+import {
+  CustomPartOptions,
+  ChildPart,
+  MixinPart,
+} from '@/r-html/r-part/helper';
 
 export const TextNodePart = MixinPart(
   class {
@@ -21,7 +25,7 @@ export const TextNodePart = MixinPart(
     #childParts: ChildPart[] = [];
     instanceNodes: Node[] = [];
 
-    constructor({ node }: PartOptions) {
+    constructor({ node }: CustomPartOptions) {
       this.#node = node as Text;
     }
 
