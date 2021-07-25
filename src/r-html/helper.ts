@@ -78,7 +78,7 @@ export const isPrefixOnEventMarker = createIsMarker(PREFIX_ON_EVENT);
 export const isMarker = createIsMarker(MARKER, false);
 export function isMarkerOnly(value?: string | null) {
   const marker = value?.trim();
-  return marker && markerOnlyRegexp.test(marker);
+  return !!marker && markerOnlyRegexp.test(marker);
 }
 
 const isObjectRaw = createIsTypeof('object');
