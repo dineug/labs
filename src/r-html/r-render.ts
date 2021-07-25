@@ -1,6 +1,7 @@
-import { createWalker, cloneNode, removeNode } from './helper';
-import { TemplateLiterals, html, templateCache } from './r-html';
-import { Part, partMap } from './r-part';
+import { createWalker, cloneNode, removeNode } from '@/r-html/helper';
+import { TemplateLiterals, html, templateCache } from '@/r-html/r-html';
+import { Part } from '@/r-html/r-part/helper';
+import { partMap } from '@/r-html/r-part';
 
 type Container = Element | ShadowRoot;
 
@@ -28,11 +29,11 @@ export function createTemplateInstance(
 
   template.nodes.forEach(node =>
     parts.push(
-      new partMap[node.type](
-        nodes[node.nodeIndex],
-        node.valueIndex,
-        node.attrName
-      )
+      new partMap[node.type]({
+        valueIndex: node.valueIndex,
+        node: nodes[node.nodeIndex],
+        attrName: node.attrName,
+      })
     )
   );
 

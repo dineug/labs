@@ -12,7 +12,7 @@ import {
   getAttributeName,
   getMarkerIndex,
   splitTextNode,
-} from './helper';
+} from '@/r-html/helper';
 
 export type DynamicNodeType =
   | 'Attribute'

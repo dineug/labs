@@ -1,5 +1,5 @@
-import { html } from './r-html';
-import { render } from './r-render';
+import { html } from '@/r-html/r-html';
+import { render } from '@/r-html/r-render';
 
 // ============================================
 

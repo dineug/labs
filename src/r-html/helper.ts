@@ -11,7 +11,7 @@ import {
   markerOnlyRegexp,
 } from './constants';
 import { Template, TemplateLiterals, DynamicNodeType } from './r-html';
-import { ChildPart } from './r-render';
+import { ChildPart } from '@/r-html/r-part/helper';
 
 type typeofKey =
   | 'bigint'
