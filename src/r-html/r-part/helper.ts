@@ -33,8 +33,8 @@ interface CustomPartClass {
   new (options: CustomPartOptions): CustomPart;
 }
 
-export const MixinPart = (Part: CustomPartClass): PartClass =>
-  class extends Part implements Part {
+export const MixinPart = (CustomPart: CustomPartClass): PartClass =>
+  class extends CustomPart implements Part {
     valueIndex: number;
 
     constructor({ node, valueIndex, attrName }: PartOptions) {

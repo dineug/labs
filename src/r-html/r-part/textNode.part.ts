@@ -6,6 +6,7 @@ import {
   isFunction,
   isObject,
   isArray,
+  isNode,
   isTemplateLiterals,
   flat,
   insertBeforeNode,
@@ -32,10 +33,20 @@ export const TextNodePart = MixinPart(
     commit(value: any) {
       if (this.#value === value) return;
 
-      if (isPrimitive(value)) {
+      if (
+        !isTemplateLiterals(value) &&
+        (isPrimitive(value) ||
+          isNode(value) ||
+          isObject(value) ||
+          isArray(value) ||
+          isFunction(value))
+      ) {
         this.instanceNodes.forEach(removeNode);
         this.instanceNodes = [];
         this.#childParts = [];
+      }
+
+      if (isPrimitive(value)) {
         this.#node.data =
           isNull(value) || isUndefined(value) ? '' : String(value);
       } else if (isTemplateLiterals(value)) {
@@ -60,9 +71,6 @@ export const TextNodePart = MixinPart(
         );
       } else if (isArray(value)) {
         const list = [...flat(value)];
-        this.instanceNodes.forEach(removeNode);
-        this.instanceNodes = [];
-        this.#childParts = [];
 
         list.forEach(data => {
           if (isPrimitive(data)) {
@@ -82,12 +90,11 @@ export const TextNodePart = MixinPart(
               this.instanceNodes.push(...nodes);
               this.#childParts.push(childPart);
             }
+          } else if (isNode(value)) {
+            insertBeforeNode(data, this.#node);
+            this.instanceNodes.push(data);
           } else if (isObject(data)) {
             // TODO 커스텀 바인딩 객체?
-            if (data instanceof Node) {
-              insertBeforeNode(data, this.#node);
-              this.instanceNodes.push(data);
-            }
           } else if (isFunction(data)) {
             // TODO 함수 바인딩?
           }
@@ -96,16 +103,11 @@ export const TextNodePart = MixinPart(
         this.#childParts.forEach(({ parts, templateLiterals: { values } }) =>
           parts.forEach(part => part.commit(values[part.valueIndex]))
         );
+      } else if (isNode(value)) {
+        insertBeforeNode(value, this.#node);
+        this.instanceNodes.push(value);
       } else if (isObject(value)) {
-        this.instanceNodes.forEach(removeNode);
-        this.instanceNodes = [];
-        this.#childParts = [];
-
         // TODO 커스텀 바인딩 객체?
-        if (value instanceof Node) {
-          insertBeforeNode(value, this.#node);
-          this.instanceNodes.push(value);
-        }
       } else if (isFunction(value)) {
         // TODO 함수 바인딩?
       }

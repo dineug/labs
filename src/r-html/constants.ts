@@ -10,6 +10,6 @@ export const MARKER = `${PREFIX_MARKER}-${SUFFIX_MARKER}`;
 export const SPREAD_MARKER = `${PREFIX_SPREAD}${MARKER}`;
 
 export const markerIndexRegexp = new RegExp(`${MARKER}-(\\d+)`);
-export const multiMarkerIndexRegexp = new RegExp(`(${MARKER}-(\\d+))`, 'g');
+export const markersRegexp = new RegExp(`(${MARKER}-\\d+)`, 'g');
 export const replaceMarkerRegexp = new RegExp(`${MARKER}-\\d+`, 'g');
 export const markerOnlyRegexp = new RegExp(`^${MARKER}-\\d+$`);

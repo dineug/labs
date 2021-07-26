@@ -7,7 +7,7 @@ import {
   PREFIX_BOOLEAN,
   replaceMarkerRegexp,
   markerIndexRegexp,
-  multiMarkerIndexRegexp,
+  markersRegexp,
   markerOnlyRegexp,
 } from './constants';
 import { Template, TemplateLiterals, DynamicNodeType } from './r-html';
@@ -90,6 +90,7 @@ export const isString = createIsTypeof<string>('string');
 export const isSymbol = createIsTypeof<symbol>('symbol');
 export const isUndefined = createIsTypeof<undefined>('undefined');
 export const isNull = (value: any): value is null => value === null;
+export const isNode = (value: any): value is Node => value instanceof Node;
 export const { isArray } = Array;
 export const isObject = (value: any) =>
   isObjectRaw(value) && !isNull(value) && !isArray(value);
@@ -116,16 +117,16 @@ export function getMarkerIndex(value: string) {
   return match ? Number(match[1]) : -1;
 }
 
-export function getMultiMarkerIndex(value: string) {
-  const indexes: number[] = [];
-  let match = multiMarkerIndexRegexp.exec(value);
+export function getMarkers(value: string) {
+  const markers: string[] = [];
+  let match = markersRegexp.exec(value);
 
   while (match) {
-    indexes.push(Number(match[2]));
-    match = multiMarkerIndexRegexp.exec(value);
+    markers.push(match[1]);
+    match = markersRegexp.exec(value);
   }
 
-  return indexes;
+  return markers;
 }
 
 export const getAttributeType = (value: string): DynamicNodeType =>
@@ -175,9 +176,7 @@ export const removeNode = (node: Node) =>
   node.parentElement && node.parentElement.removeChild(node);
 
 export function splitTextNode(node: Text) {
-  const markers = getMultiMarkerIndex(node.data).map(index =>
-    createMarker(index)
-  );
+  const markers = getMarkers(node.data);
 
   node.data
     .replace(replaceMarkerRegexp, MARKER)
@@ -193,8 +192,9 @@ export function splitTextNode(node: Text) {
       []
     )
     .filter(node => node.data !== '')
-    .forEach((textNode, index) =>
-      index === 0
+    .reverse()
+    .forEach((textNode, index, { length }) =>
+      index === length - 1
         ? (node.data = textNode.data)
         : insertAfterNode(textNode, node)
     );
