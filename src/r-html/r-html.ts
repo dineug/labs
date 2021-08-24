@@ -50,11 +50,10 @@ export const html = (
   if (templateCache.has(strings)) return templateLiterals;
 
   const tpl = strings
-    .reduce<Array<string>>(
-      (acc, cur, i) =>
-        i < values.length ? acc.concat(cur, createMarker(i)) : acc.concat(cur),
-      []
-    )
+    .reduce<Array<string>>((acc, cur, i) => {
+      i < values.length ? acc.push(cur, createMarker(i)) : acc.push(cur);
+      return acc;
+    }, [])
     .join('');
   const template = createTemplate(tpl);
   const walker = createWalker(template.element.content);

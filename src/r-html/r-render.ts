@@ -1,7 +1,7 @@
 import { createWalker, cloneNode, removeNode } from '@/r-html/helper';
 import { TemplateLiterals, html, templateCache } from '@/r-html/r-html';
 import { Part } from '@/r-html/r-part/helper';
-import { partMap } from '@/r-html/r-part';
+import { createPart } from '@/r-html/r-part';
 
 type Container = Element | ShadowRoot;
 
@@ -28,13 +28,7 @@ export function createTemplateInstance(
   while (walker.nextNode()) nodes.push(walker.currentNode);
 
   template.nodes.forEach(node =>
-    parts.push(
-      new partMap[node.type]({
-        valueIndex: node.valueIndex,
-        node: nodes[node.nodeIndex],
-        attrName: node.attrName,
-      })
-    )
+    parts.push(createPart(node, nodes[node.nodeIndex]))
   );
 
   return fragment;
@@ -56,14 +50,13 @@ export function render(
   } else {
     const parts: Part[] = [];
     const fragment = createTemplateInstance(templateLiterals, parts);
+    if (!fragment) return;
 
     console.log(parts);
 
-    if (fragment) {
-      parts.forEach(part => part.commit(values[part.valueIndex]));
-      renderCache.set(container, { strings, parts });
-      container.childNodes.forEach(removeNode);
-      container.appendChild(fragment);
-    }
+    parts.forEach(part => part.commit(values[part.valueIndex]));
+    renderCache.set(container, { strings, parts });
+    container.childNodes.forEach(removeNode);
+    container.appendChild(fragment);
   }
 }

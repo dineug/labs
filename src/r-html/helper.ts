@@ -181,16 +181,15 @@ export function splitTextNode(node: Text) {
   node.data
     .replace(replaceMarkerRegexp, MARKER)
     .split(MARKER)
-    .reduce<Array<Text>>(
-      (acc, cur, i) =>
-        i < markers.length
-          ? acc.concat(
-              document.createTextNode(cur),
-              document.createTextNode(markers[i])
-            )
-          : acc.concat(document.createTextNode(cur)),
-      []
-    )
+    .reduce<Array<Text>>((acc, cur, i) => {
+      i < markers.length
+        ? acc.push(
+            document.createTextNode(cur),
+            document.createTextNode(markers[i])
+          )
+        : acc.push(document.createTextNode(cur));
+      return acc;
+    }, [])
     .filter(node => node.data !== '')
     .reverse()
     .forEach((textNode, index, { length }) =>

@@ -44,8 +44,4 @@ export const MixinPart = (CustomPart: CustomPartClass): PartClass =>
       });
       this.valueIndex = valueIndex;
     }
-
-    commit(value: any) {
-      super.commit(value);
-    }
   };
