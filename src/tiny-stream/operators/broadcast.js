@@ -1,4 +1,4 @@
-import { Observable } from '@/seunghwan.lee94@nhntoast.com/feat-stream';
+import { Observable } from '../observable/Observable';
 
 export function broadcast() {
   const subscriberList = [];

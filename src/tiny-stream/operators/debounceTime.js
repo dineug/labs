@@ -1,4 +1,4 @@
-import { Observable } from '@/seunghwan.lee94@nhntoast.com/feat-stream';
+import { Observable } from '../observable/Observable';
 
 export const debounceTime = ms => source$ =>
   new Observable(subscriber => {
