@@ -1,0 +1,11 @@
+{
+  "name": "@dineug/rxjs-excel",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vite"
+  },
+  "dependencies": {
+    "xlsx": "^0.17.4"
+  }
+}
