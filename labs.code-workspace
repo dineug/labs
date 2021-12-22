@@ -15,6 +15,10 @@
     {
       "name": "rxjs-excel",
       "path": "./packages/rxjs-excel"
+    },
+    {
+      "name": "vue-saga",
+      "path": "./packages/vue-saga"
     }
   ],
   "settings": {

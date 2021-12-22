@@ -1,0 +1,12 @@
+{
+  "name": "@dineug/vue-saga",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vite"
+  },
+  "dependencies": {
+    "@vue/reactivity": "^3.2.26",
+    "redux-saga": "^1.1.3"
+  }
+}
