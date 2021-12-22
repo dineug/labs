@@ -52,8 +52,8 @@ export function createStore<S extends object>({
   return {
     state,
     dispatch,
-    dispatch$,
-    beforeDispatch$,
+    dispatch$: dispatch$.asObservable(),
+    beforeDispatch$: beforeDispatch$.asObservable(),
     destroy,
   };
 }
