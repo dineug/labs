@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import xlsx from 'xlsx';
-import { Rows, Sheet, ExcelData } from '@@types/excel';
+
 import {
   getRows,
   isLast,
@@ -8,6 +8,7 @@ import {
   percent,
   toRange,
 } from '@/excel/excel.util';
+import { ExcelData, Rows, Sheet } from '@@types/excel';
 
 type Props = {
   filename?: string;

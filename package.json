@@ -16,9 +16,9 @@
   "scripts": {
     "prepare": "husky install",
     "format": "npm run format:eslint && npm run format:prettier",
-    "format:eslint": "eslint \"**/*.{js,ts}\" --fix",
-    "format:prettier": "prettier \"**/*.{html,js,json,md,ts}\" --write",
-    "lint": "eslint \"**/*.{js,ts}\""
+    "format:eslint": "eslint \"**/*.{js,jsx,ts,tsx}\" --fix",
+    "format:prettier": "prettier \"**/*.{html,js,jsx,json,md,ts,tsx}\" --write",
+    "lint": "eslint \"**/*.{js,jsx,ts,tsx}\""
   },
   "dependencies": {
     "lodash-es": "^4.17.21",
@@ -74,7 +74,7 @@
     "vite": "^2.6.10"
   },
   "lint-staged": {
-    "**/*.{js,ts}": [
+    "**/*.{js,jsx,ts,tsx}": [
       "eslint --fix",
       "prettier --write"
     ]
