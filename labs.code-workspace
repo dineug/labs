@@ -19,6 +19,10 @@
     {
       "name": "vue-saga",
       "path": "./packages/vue-saga"
+    },
+    {
+      "name": "action-type",
+      "path": "./packages/action-type"
     }
   ],
   "settings": {
