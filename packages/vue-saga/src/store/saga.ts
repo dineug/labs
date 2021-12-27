@@ -3,9 +3,10 @@ import { runSaga, stdChannel } from 'redux-saga';
 
 import { CommandType, Store } from '@/store';
 
-export function createSaga<S>(
+export function createSaga<S, SAGA extends (...args: any[]) => Iterator<any>>(
   { state, dispatch, dispatch$ }: Store<S>,
-  saga: () => Iterator<any>
+  saga: SAGA,
+  ...args: Parameters<SAGA>
 ) {
   const channel = stdChannel<CommandType>();
   const sagaIO = {
@@ -16,7 +17,7 @@ export function createSaga<S>(
     },
     getState: () => state,
   };
-  const task = runSaga(sagaIO, saga);
+  const task = runSaga(sagaIO, saga, ...args);
 
   const subscription = dispatch$.subscribe(
     command => !Reflect.get(command, SAGA_ACTION) && sagaIO.dispatch(command)
