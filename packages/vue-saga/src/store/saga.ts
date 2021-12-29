@@ -1,27 +1,37 @@
 import { SAGA_ACTION } from '@redux-saga/symbols';
 import { runSaga, stdChannel } from 'redux-saga';
+import { map } from 'rxjs/operators';
 
-import { CommandType, Store } from '@/store';
+import { Action, notEmptyActions, Store } from '@/store';
 
-export function createSaga<S, SAGA extends (...args: any[]) => Iterator<any>>(
-  { state, dispatch, dispatch$ }: Store<S>,
+export function createSaga<
+  SAGA extends (...args: any[]) => Iterator<any>,
+  S,
+  M
+>(
+  { state, dispatchSync, dispatch$ }: Store<S, M>,
   saga: SAGA,
   ...args: Parameters<SAGA>
 ) {
-  const channel = stdChannel<CommandType>();
+  const channel = stdChannel<Action<keyof M, M>>();
   const sagaIO = {
     channel,
-    dispatch(command: CommandType) {
-      Reflect.get(command, SAGA_ACTION) && dispatch(command);
-      channel.put(command);
+    dispatch(action: Action<keyof M, M>) {
+      Reflect.get(action, SAGA_ACTION) && dispatchSync(action);
+      channel.put(action);
     },
     getState: () => state,
   };
   const task = runSaga(sagaIO, saga, ...args);
 
-  const subscription = dispatch$.subscribe(
-    command => !Reflect.get(command, SAGA_ACTION) && sagaIO.dispatch(command)
-  );
+  const subscription = dispatch$
+    .pipe(
+      map(actions =>
+        actions.filter(action => !Reflect.get(action, SAGA_ACTION))
+      ),
+      notEmptyActions
+    )
+    .subscribe(actions => actions.forEach(sagaIO.dispatch));
 
   const destroy = () => {
     subscription.unsubscribe();
